@@ -1,0 +1,12 @@
+## Run Spark shell
+spark-shell local[4]
+
+# Submit job
+spark-submit --class spark.WordCount --master local[2] target/spark-test-1.0-SNAPSHOT.jar ./shakespeare.txt ./_output-folder
+
+# EMR arguments
+s3://aws-lsds2020-lab2-data/jars/spark-test-1.0-SNAPSHOT.jar
+--class spark.WordCount s3://aws-lsds2020-lab2-data/input/shakespeare.txt s3://aws-lsds2020-lab2-data/output/r1
+
+# Acess Hadoop Console
+ssh -i ~/ec2-emr-ssh-key.pem hadoop@ec2-100-25-143-246.compute-1.amazonaws.com
