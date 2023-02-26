@@ -20,15 +20,17 @@ public class TwitterLanguageFilterApp {
         String language = argsList.get(0);
         String inputFile = argsList.get(1);
         String outputFile = argsList.get(2);
-        String bucket = argsList.get(3);
-        System.out.println("Language: " + language + ". Input file: " + inputFile + ". Output file: " + outputFile + ". Destination bucket: " + bucket);
+        //String bucket = argsList.get(3);
+        //System.out.println("Language: " + language + ". Input file: " + inputFile + ". Output file: " + outputFile + ". Destination bucket: " + bucket);
+        System.out.println("\n\nLanguage: " + language + ". Input file: " + inputFile + ". Output file: " + outputFile + "\n\n");
+        
         int counter = 0;
 
         //Start Spark context
         SparkConf conf = new SparkConf().setAppName("TwitterLanguageFilterApp");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
-        System.out.println("We created Spark Context");
+        System.out.println("\n\nWe created Spark Context\n\n");
 
         long start = System.currentTimeMillis();
         JavaRDD<String> tweets = sc.textFile(inputFile);
@@ -53,7 +55,7 @@ public class TwitterLanguageFilterApp {
                                         //.reduceByKey((a, b) -> Integer.parseInt(a.toString()) + Integer.parseInt(b.toString())); //Converting object to integer type
    
         System.out.println("Number of tweets: " + TweetsCount);
-        filteredTweets.saveAsTextFile(outputFile);
+        simplifiedTweets.saveAsTextFile(outputFile);
 
         //final S3Uploader uploader = new S3Uploader(bucket, language); //The prefix is the language
         //uploader.upload(Arrays.asList(filteredTweets));
