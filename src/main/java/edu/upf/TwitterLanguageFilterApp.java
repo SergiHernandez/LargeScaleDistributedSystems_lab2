@@ -18,12 +18,17 @@ public class TwitterLanguageFilterApp {
     public static void main( String[] args ) throws IOException {
         List<String> argsList = Arrays.asList(args);
         String language = argsList.get(0);
-        String inputFile = argsList.get(1);
-        String outputFile = argsList.get(2);
-        //String bucket = argsList.get(3);
-        //System.out.println("Language: " + language + ". Input file: " + inputFile + ". Output file: " + outputFile + ". Destination bucket: " + bucket);
-        System.out.println("\n\nLanguage: " + language + ". Input file: " + inputFile + ". Output file: " + outputFile + "\n\n");
+        String outputFile = argsList.get(1);
+        String bucket = argsList.get(2);
+        System.out.println("\n\nLanguage: " + language + ". Input file: " + inputFile + ". Output file: " + outputFile + ". Destination bucket: " + bucket+"\n\n");
         
+        for(String inputFile: argsList.subList(3, argsList.size())) {
+            System.out.println("Processing: " + inputFile);
+            final FileLanguageFilter filter = new FileLanguageFilter(inputFile, outputFile);
+            filter.filterLanguage(language);
+            counter = counter + filter.getCounter();
+        }  
+
         int counter = 0;
 
         //Start Spark context
@@ -54,7 +59,7 @@ public class TwitterLanguageFilterApp {
                                         //.mapToPair(tweet -> new Tuple2<>(tweet, 1))
                                         //.reduceByKey((a, b) -> Integer.parseInt(a.toString()) + Integer.parseInt(b.toString())); //Converting object to integer type
    
-        System.out.println("Number of tweets: " + TweetsCount);
+        System.out.println("\n\nNumber of tweets: " + TweetsCount + "\n\n");
         simplifiedTweets.saveAsTextFile(outputFile);
 
         //final S3Uploader uploader = new S3Uploader(bucket, language); //The prefix is the language
