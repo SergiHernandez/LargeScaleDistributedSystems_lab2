@@ -72,6 +72,6 @@ public class TwitterLanguageFilterApp {
 
         long stop = System.currentTimeMillis();
         System.out.println("Done in ms: " + (stop - start));
-        
+        sc.close();
     }
 }
