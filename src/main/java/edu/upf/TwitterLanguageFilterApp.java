@@ -28,7 +28,7 @@ public class TwitterLanguageFilterApp {
         SparkConf conf = new SparkConf().setAppName("TwitterLanguageFilterApp");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
-        System.out.println("Spark COntext created");
+        System.out.println("We created Spark Context");
 
         long start = System.currentTimeMillis();
         JavaRDD<String> tweets = sc.textFile(inputFile);
