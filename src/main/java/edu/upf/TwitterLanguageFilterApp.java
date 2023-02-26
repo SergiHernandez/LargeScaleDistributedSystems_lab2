@@ -20,7 +20,7 @@ public class TwitterLanguageFilterApp {
         String language = argsList.get(0);
         String outputFile = argsList.get(1);
         String bucket = argsList.get(2);
-        System.out.println("\n\nLanguage: " + language + ". Input file: " + inputFile + ". Output file: " + outputFile + ". Destination bucket: " + bucket+"\n\n");
+        System.out.println("\n\nLanguage: " + language + ". Output folder: " + outputFile + ". Destination bucket: " + bucket+"\n\n");
 
         //Start Spark context
         SparkConf conf = new SparkConf().setAppName("TwitterLanguageFilterApp");
@@ -30,15 +30,21 @@ public class TwitterLanguageFilterApp {
 
         long start = System.currentTimeMillis();
 
+        /*/
+        System.out.println("\n\nProcessing: " + argsList.get(3) + "\n\n");
         JavaRDD<String> tweets = sc.textFile(argsList.get(3));
+        System.out.println("\n\nNumber of tweets in "+ argsList.get(3) +": " + tweets.count() + "\n\n"); // Debugging
         for(String inpFile: argsList.subList(4, argsList.size())) {
-            System.out.println("Processing: " + inpFile);
+            System.out.println("\n\nProcessing: " + inpFile + "\n\n");
             JavaRDD<String> tweetsAux = sc.textFile(inpFile);
+            System.out.println("\n\nNumber of tweets in "+ inpFile +": " + tweetsAux.count() + "\n\n"); // Debugging
             tweets = tweets.union(tweetsAux);
         }
+        */
+        JavaRDD<String> tweets = sc.textFile(argsList.get(3)); 
         
         long TweeeetsCount = tweets.count();
-        System.out.println("Number of tweets: " + TweeeetsCount);
+        System.out.println("\n\nTotal number of tweets: " + TweeeetsCount + "\n\n"); // Debugging
         //JavaRDD<String> filteredTweets = tweets.filter(tweet -> );
         //SimplifiedTweet(tweetId, text, userId, userName, language, timestampMs)
         
