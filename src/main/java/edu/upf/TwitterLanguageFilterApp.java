@@ -21,15 +21,6 @@ public class TwitterLanguageFilterApp {
         String outputFile = argsList.get(1);
         String bucket = argsList.get(2);
         System.out.println("\n\nLanguage: " + language + ". Input file: " + inputFile + ". Output file: " + outputFile + ". Destination bucket: " + bucket+"\n\n");
-        
-        for(String inputFile: argsList.subList(3, argsList.size())) {
-            System.out.println("Processing: " + inputFile);
-            final FileLanguageFilter filter = new FileLanguageFilter(inputFile, outputFile);
-            filter.filterLanguage(language);
-            counter = counter + filter.getCounter();
-        }  
-
-        int counter = 0;
 
         //Start Spark context
         SparkConf conf = new SparkConf().setAppName("TwitterLanguageFilterApp");
@@ -39,7 +30,6 @@ public class TwitterLanguageFilterApp {
 
         long start = System.currentTimeMillis();
 
-        
         JavaRDD<String> tweets = sc.textFile(argsList.get(3));
         for(String inpFile: argsList.subList(4, argsList.size())) {
             System.out.println("Processing: " + inpFile);
