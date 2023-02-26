@@ -33,11 +33,20 @@ public class TwitterLanguageFilterApp {
         System.out.println("\n\nWe created Spark Context\n\n");
 
         long start = System.currentTimeMillis();
-        JavaRDD<String> tweets = sc.textFile(inputFile);
+
+        
+        JavaRDD<String> tweets = sc.textFile(argsList.get(3));
+        for(String inpFile: argsList.subList(4, argsList.size())) {
+            System.out.println("Processing: " + inpFile);
+            JavaRDD<String> tweetsAux = sc.textFile(inpFile);
+            tweets = tweets.union(tweetsAux);
+        }
+        
         long TweeeetsCount = tweets.count();
         System.out.println("Number of tweets: " + TweeeetsCount);
         //JavaRDD<String> filteredTweets = tweets.filter(tweet -> );
         //SimplifiedTweet(tweetId, text, userId, userName, language, timestampMs)
+        
         JavaRDD<String> filteredTweets = tweets
                                         .flatMap(tweet_page -> Arrays.asList(tweet_page.split("\\{\\}")).iterator());//Read raw tweet (line)
 
