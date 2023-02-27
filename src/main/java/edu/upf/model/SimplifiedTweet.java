@@ -59,6 +59,10 @@ public class SimplifiedTweet {
     return this.language;
   }
 
+  public String getText (){
+    return this.text;
+  }
+
   @Override
   public String toString() {
     return new Gson().toJson(this);
