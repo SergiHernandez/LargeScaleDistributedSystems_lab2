@@ -12,15 +12,13 @@ import scala.Tuple2;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-//Testing once again...
 
 public class TwitterLanguageFilterApp {
     public static void main( String[] args ) throws IOException {
         List<String> argsList = Arrays.asList(args);
         String language = argsList.get(0);
         String outputFile = argsList.get(1);
-        String bucket = argsList.get(2);
-        System.out.println("\n\nLanguage: " + language + ". Output folder: " + outputFile + ". Destination bucket: " + bucket+"\n\n");
+        System.out.println("\n\nLanguage: " + language + ". Output folder: " + outputFile + "\n\n");
 
         //Start Spark context
         SparkConf conf = new SparkConf().setAppName("TwitterLanguageFilterApp");
@@ -30,18 +28,7 @@ public class TwitterLanguageFilterApp {
 
         long start = System.currentTimeMillis();
 
-        /*/
-        System.out.println("\n\nProcessing: " + argsList.get(3) + "\n\n");
-        JavaRDD<String> tweets = sc.textFile(argsList.get(3));
-        System.out.println("\n\nNumber of tweets in "+ argsList.get(3) +": " + tweets.count() + "\n\n"); // Debugging
-        for(String inpFile: argsList.subList(4, argsList.size())) {
-            System.out.println("\n\nProcessing: " + inpFile + "\n\n");
-            JavaRDD<String> tweetsAux = sc.textFile(inpFile);
-            System.out.println("\n\nNumber of tweets in "+ inpFile +": " + tweetsAux.count() + "\n\n"); // Debugging
-            tweets = tweets.union(tweetsAux);
-        }
-        */
-        JavaRDD<String> tweets = sc.textFile(argsList.get(3)); 
+        JavaRDD<String> tweets = sc.textFile(argsList.get(2)); 
         
         long TweeeetsCount = tweets.count();
         System.out.println("\n\nTotal number of tweets: " + TweeeetsCount + "\n\n"); // Debugging
@@ -58,12 +45,7 @@ public class TwitterLanguageFilterApp {
                                         .filter(tweet -> language.equals(tweet.getLanguage())); //We should do it in two steps
         
         long TweetsCount = simplifiedTweets.count();
-        // JavaRDD<Integer> filteredTweetsCount = filteredTweets
-        //                                 .map(tweet -> 1)
-        //                                 .reduce("+");
-                                        //.mapToPair(tweet -> new Tuple2<>(tweet, 1))
-                                        //.reduceByKey((a, b) -> Integer.parseInt(a.toString()) + Integer.parseInt(b.toString())); //Converting object to integer type
-   
+        
         System.out.println("\n\nNumber of tweets: " + TweetsCount + "\n\n");
         simplifiedTweets.saveAsTextFile(outputFile);
 
