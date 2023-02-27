@@ -1,6 +1,6 @@
-package edu.upf;
+package spark;
 
-import edu.upf.model.SimplifiedTweet;
+import edu.upf.model.ExtendedSimplifiedTweet;
 
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -35,10 +35,11 @@ public class BiGramsApp {
         long TweeeetsCount = tweets.count();
         System.out.println("\n\nTotal number of tweets: " + TweeeetsCount + "\n\n"); // Debugging
 
-        JavaRDD<SimplifiedTweet> simplifiedTweets = tweets
-                                        .map(tweet -> SimplifiedTweet.fromJson(tweet))//convert raw tweet to SimplifiedTweet with optional type
+        JavaRDD<ExtendedSimplifiedTweet> simplifiedTweets = tweets
+                                        .map(tweet -> ExtendedSimplifiedTweet.fromJson(tweet))//convert raw tweet to SimplifiedTweet with optional type
                                         .filter(tweet -> tweet.isPresent())//Check that the Optional SimplifiedTweet is not empty
                                         .map(tweet -> tweet.get())
+                                        .filter(tweet -> !tweet.isRetweeted())
                                         .filter(tweet -> language.equals(tweet.getLanguage())); //We should do it in two steps
 
         JavaRDD<String> tweetsText = simplifiedTweets
@@ -56,6 +57,7 @@ public class BiGramsApp {
         List<Tuple2<Integer, String>> top10bigramsTuples = bigramsSorted
                                         .take(10);
         
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Check why we have bigrams with only one word (empty words)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         JavaPairRDD<Integer, String> top10bigrams = sc.parallelizePairs(top10bigramsTuples);
         
         top10bigrams.saveAsTextFile(outputFile);
@@ -68,8 +70,10 @@ public class BiGramsApp {
     public static List<String> bigram (String s){
         List<String> bigrams = new ArrayList<String>();
         String[] words = s.split("[\\p{Punct}\\s]+");
-        for (int i = 0; i < words.length - 2 + 1; i++)
-            bigrams.add(words[i]+" "+words[i+1]);
+        if (words.length >= 2){
+            for (int i = 0; i < words.length - 1; i++)
+                bigrams.add(words[i]+" "+words[i+1]);
+        }
         return bigrams;
     }
 }
