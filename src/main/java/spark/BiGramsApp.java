@@ -28,12 +28,7 @@ public class BiGramsApp {
 
         System.out.println("\n\nWe created Spark Context\n\n");
 
-        long start = System.currentTimeMillis();
-
         JavaRDD<String> tweets = sc.textFile(argsList.get(2)); 
-        
-        long TweeeetsCount = tweets.count();
-        System.out.println("\n\nTotal number of tweets: " + TweeeetsCount + "\n\n"); // Debugging
 
         JavaRDD<ExtendedSimplifiedTweet> simplifiedTweets = tweets
                                         .map(tweet -> ExtendedSimplifiedTweet.fromJson(tweet))//convert raw tweet to SimplifiedTweet with optional type
@@ -57,14 +52,10 @@ public class BiGramsApp {
         List<Tuple2<Integer, String>> top10bigramsTuples = bigramsSorted
                                         .take(10);
         
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Check why we have bigrams with only one word (empty words)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         JavaPairRDD<Integer, String> top10bigrams = sc.parallelizePairs(top10bigramsTuples);
         
         top10bigrams.saveAsTextFile(outputFile);
 
-        long stop = System.currentTimeMillis();
-        System.out.println("Done in ms: " + (stop - start));
-        //
     }
 
     public static List<String> bigram (String s) {
@@ -72,10 +63,10 @@ public class BiGramsApp {
         String[] words = s.split("[\\p{Punct}\\s]+");
         if (words.length >= 2) { //Checking that the tweet has at least 2 words
             for (int i = 0; i < words.length - 1; i++) {
-                if (!words[i].equals("") && !words[i+1].equals("")) {
+                if (!words[i].equals("") && !words[i+1].equals("")) { //Skip bigrams with empty words
                     bigrams.add(words[i]+" "+words[i+1]);
                 }
-            }   
+            }
         }
         return bigrams;
     }

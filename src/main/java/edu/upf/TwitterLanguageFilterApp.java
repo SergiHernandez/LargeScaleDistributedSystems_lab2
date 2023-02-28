@@ -28,18 +28,12 @@ public class TwitterLanguageFilterApp {
 
         JavaRDD<String> tweets = sc.textFile(argsList.get(2)); 
         
-        long TweeeetsCount = tweets.count();
-        System.out.println("\n\nTotal number of tweets: " + TweeeetsCount + "\n\n"); // Debugging
-
         JavaRDD<SimplifiedTweet> simplifiedTweets = tweets
                                         .map(tweet -> SimplifiedTweet.fromJson(tweet))//convert raw tweet to SimplifiedTweet with optional type
                                         .filter(tweet -> tweet.isPresent())//Check that the Optional SimplifiedTweet is not empty
                                         .map(tweet -> tweet.get())
                                         .filter(tweet -> language.equals(tweet.getLanguage())); //We should do it in two steps
-        
-        long TweetsCount = simplifiedTweets.count();
-        
-        System.out.println("\n\nNumber of tweets: " + TweetsCount + "\n\n");
+
         simplifiedTweets.saveAsTextFile(outputFile);
 
         long stop = System.currentTimeMillis();
