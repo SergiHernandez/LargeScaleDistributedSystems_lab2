@@ -1,3 +1,9 @@
+Sergi Hernández B. (NIA: 242330)
+
+Marc Pérez (NIA: 239952)
+
+Gael Ribes (NIA: 242311)
+
 # Benchmarking
 
 ### Language: spanish (es)

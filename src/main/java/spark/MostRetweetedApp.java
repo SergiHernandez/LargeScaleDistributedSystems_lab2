@@ -20,9 +20,7 @@ public class MostRetweetedApp {
 
         //Arguments: language, input files, output files
         List<String> argsList = Arrays.asList(args);
-        String language = argsList.get(0);
-        String outputFile = argsList.get(1);
-        System.out.println("\n\nLanguage: " + language + ". Output folder: " + outputFile + "\n\n");
+        String outputFile = argsList.get(0);
 
         //Start Spark context
         SparkConf conf = new SparkConf().setAppName("TwitterLanguageFilterApp");
@@ -30,7 +28,7 @@ public class MostRetweetedApp {
 
         System.out.println("\n\nWe created Spark Context\n\n");
 
-        JavaRDD<String> tweets = sc.textFile(argsList.get(2)); 
+        JavaRDD<String> tweets = sc.textFile(argsList.get(1)); 
 
         //Find the most retweeted users -> (userId, count) top 10 sorted
         JavaPairRDD<Integer, String> retweetedUsersSorted = tweets

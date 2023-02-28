@@ -1,0 +1,6 @@
+spark\WordCount.class
+spark\MostRetweetedApp.class
+edu\upf\model\SimplifiedTweet.class
+edu\upf\TwitterLanguageFilterApp.class
+edu\upf\model\ExtendedSimplifiedTweet.class
+spark\BiGramsApp.class
