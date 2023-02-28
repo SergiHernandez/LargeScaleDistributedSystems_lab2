@@ -67,12 +67,15 @@ public class BiGramsApp {
         //
     }
 
-    public static List<String> bigram (String s){
+    public static List<String> bigram (String s) {
         List<String> bigrams = new ArrayList<String>();
         String[] words = s.split("[\\p{Punct}\\s]+");
-        if (words.length >= 2){
-            for (int i = 0; i < words.length - 1; i++)
-                bigrams.add(words[i]+" "+words[i+1]);
+        if (words.length >= 2) { //Checking that the tweet has at least 2 words
+            for (int i = 0; i < words.length - 1; i++) {
+                if (!words[i].equals("") && !words[i+1].equals("")) {
+                    bigrams.add(words[i]+" "+words[i+1]);
+                }
+            }   
         }
         return bigrams;
     }
